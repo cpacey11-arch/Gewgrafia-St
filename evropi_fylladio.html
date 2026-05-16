@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Η Ευρώπη – Φυλλάδιο Εξάσκησης</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+  :root {
+    --blue: #1a6fa8;
+    --green: #2e8b57;
+    --orange: #e07b00;
+    --red: #c0392b;
+    --lightblue: #e8f4fd;
+    --lightgreen: #eafaf1;
+    --lightyellow: #fffde7;
+    --lightred: #fdecea;
+    --gray: #f5f5f5;
+    --correct: #27ae60;
+    --wrong: #e74c3c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', Arial, sans-serif;
+    background: #f0f4f8;
+    color: #222;
+    font-size: 15px;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.12);
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #1a6fa8, #0d4f7c);
+    color: white;
+    padding: 28px 36px 22px;
+    position: relative;
+  }
+  .header h1 { font-size: 26px; font-weight: 800; letter-spacing: 0.5px; }
+  .header .subtitle { font-size: 14px; opacity: 0.85; margin-top: 4px; }
+  .header .grade { 
+    position: absolute; top: 20px; right: 28px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 8px; padding: 6px 14px;
+    font-size: 13px; font-weight: 700;
+  }
+
+  /* SECTIONS */
+  .section {
+    padding: 24px 36px;
+    border-bottom: 2px solid #e8eef4;
+  }
+  .section-title {
+    font-size: 18px; font-weight: 800; color: var(--blue);
+    border-left: 5px solid var(--blue);
+    padding-left: 12px; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title .icon { font-size: 20px; }
+
+  /* INFO BOX */
+  .info-box {
+    background: var(--lightblue);
+    border: 1px solid #b8d8f0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .info-box strong { color: var(--blue); }
+
+  /* CATEGORIES GRID */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .cat-card {
+    background: var(--lightyellow);
+    border: 1px solid #f0d060;
+    border-radius: 10px;
+    padding: 12px 16px;
+  }
+  .cat-card h4 { color: var(--orange); font-size: 13px; font-weight: 800; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .cat-card p { font-size: 13px; line-height: 1.7; color: #444; }
+
+  /* MAP CONTAINER */
+  .map-container {
+    position: relative;
+    width: 100%;
+    background: #d4eaf7;
+    border-radius: 12px;
+    border: 2px solid #8bc4e0;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .map-svg { width: 100%; display: block; }
+
+  /* EXERCISE BLOCKS */
+  .exercise {
+    background: #fafbfc;
+    border: 1px solid #dde5ed;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .exercise h4 {
+    font-size: 14px; font-weight: 800; color: #444;
+    margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+  }
+  .exercise-num {
+    background: var(--blue);
+    color: white;
+    border-radius: 50%; width: 22px; height: 22px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; flex-shrink: 0;
+  }
+
+  /* FILL IN THE BLANK */
+  .blank-input {
+    border: none;
+    border-bottom: 2px solid var(--blue);
+    background: transparent;
+    font-family: inherit;
+    font-size: 14px;
+    color: #1a6fa8;
+    font-weight: 700;
+    width: 140px;
+    padding: 2px 4px;
+    outline: none;
+    text-align: center;
+  }
+  .blank-input:focus { border-bottom-color: var(--orange); }
+  .blank-input.correct { border-bottom-color: var(--correct); color: var(--correct); background: #eafaf1; border-radius: 4px 4px 0 0; }
+  .blank-input.wrong { border-bottom-color: var(--wrong); color: var(--wrong); background: var(--lightred); border-radius: 4px 4px 0 0; }
+
+  /* MATCH EXERCISE */
+  .match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .match-item {
+    background: white;
+    border: 1.5px solid #ccd8e0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  .match-label { font-weight: 700; color: var(--blue); margin-right: 6px; }
+
+  /* SELECT */
+  .styled-select {
+    border: 2px solid #b0c8dc;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-family: inherit;
+    font-size: 13px;
+    background: white;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+  }
+  .styled-select:focus { border-color: var(--blue); }
+  .styled-select.correct { border-color: var(--correct); background: #eafaf1; color: var(--correct); }
+  .styled-select.wrong { border-color: var(--wrong); background: var(--lightred); color: var(--wrong); }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-block;
+    padding: 9px 20px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  .btn-check { background: var(--blue); color: white; }
+  .btn-check:hover { background: #155a8a; }
+  .btn-reset { background: #e0e0e0; color: #555; margin-left: 8px; }
+  .btn-reset:hover { background: #ccc; }
+  .btn-reveal { background: var(--orange); color: white; }
+  .btn-reveal:hover { background: #c06a00; }
+
+  .btn-row { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* FEEDBACK */
+  .feedback {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok { background: #eafaf1; border: 1px solid #a9dfbf; color: var(--correct); }
+  .feedback.err { background: var(--lightred); border: 1px solid #f5b7b1; color: var(--wrong); }
+
+  /* SCORE DISPLAY */
+  .score-display {
+    display: none;
+    background: linear-gradient(135deg, #1a6fa8, #0d4f7c);
+    color: white;
+    border-radius: 12px;
+    padding: 16px 24px;
+    text-align: center;
+    margin-top: 16px;
+    font-size: 18px;
+    font-weight: 800;
+  }
+  .score-display.show { display: block; }
+  .score-display .score-num { font-size: 36px; margin: 6px 0; }
+
+  /* SELF-ASSESSMENT */
+  .self-assess {
+    background: var(--lightgreen);
+    border: 1px solid #a9dfbf;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+  }
+  .self-assess h4 { color: var(--green); font-size: 14px; font-weight: 800; margin-bottom: 10px; }
+  .assess-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 0; border-bottom: 1px dashed #c0e0d0; font-size: 13px;
+  }
+  .assess-item:last-child { border-bottom: none; }
+  .assess-stars { display: flex; gap: 4px; }
+  .star-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 20px; color: #ccc; transition: color 0.1s;
+    padding: 0; line-height: 1;
+  }
+  .star-btn.active { color: #f1c40f; }
+  .star-btn:hover { color: #f39c12; }
+
+  /* MAP SVG labels */
+  .map-blank-label {
+    font-size: 11px; font-weight: 700; fill: #1a6fa8; cursor: default;
+  }
+  .map-blank-box {
+    fill: white; stroke: #1a6fa8; stroke-width: 1.5; rx: 3;
+  }
+  .map-answer-input {
+    position: absolute;
+    font-family: 'Nunito', Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1a6fa8;
+    border: 1.5px solid #1a6fa8;
+    border-radius: 4px;
+    background: white;
+    padding: 1px 4px;
+    text-align: center;
+    outline: none;
+    width: 90px;
+  }
+  .map-answer-input.correct { border-color: var(--correct); color: var(--correct); background: #eafaf1; }
+  .map-answer-input.wrong { border-color: var(--wrong); color: var(--wrong); background: var(--lightred); }
+
+  /* HINT BOX */
+  .hint-box {
+    display: none;
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #795548;
+    margin-top: 10px;
+  }
+  .hint-box.show { display: block; }
+
+  /* TRUE/FALSE */
+  .tf-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 0; border-bottom: 1px dashed #dde5ed; font-size: 13px;
+  }
+  .tf-row:last-child { border-bottom: none; }
+  .tf-btn {
+    border: 2px solid #ccd8e0;
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 12px; font-weight: 700;
+    background: white; cursor: pointer; transition: all 0.15s;
+  }
+  .tf-btn.selected-true { background: #eafaf1; border-color: var(--correct); color: var(--correct); }
+  .tf-btn.selected-false { background: var(--lightred); border-color: var(--wrong); color: var(--wrong); }
+  .tf-btn.correct-final { background: var(--correct); border-color: var(--correct); color: white; }
+  .tf-btn.wrong-final { background: var(--wrong); border-color: var(--wrong); color: white; }
+  .tf-text { flex: 1; }
+
+  /* FOOTER */
+  .footer {
+    background: #1a3a5c;
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  @media print {
+    body { background: white; }
+    .page { box-shadow: none; max-width: 100%; }
+    .btn, .btn-row, .score-display, .self-assess { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="grade">ΣΤ΄ Δημοτικού · Γεωγραφία</div>
+    <h1>🌍 Η Ευρώπη</h1>
+    <div class="subtitle">Φυλλάδιο Εξάσκησης · Κεφάλαια 24–25</div>
+  </div>
+
+  <!-- ===== SECTION 1: ΒΑΣΙΚΕΣ ΠΛΗΡΟΦΟΡΙΕΣ ===== -->
+  <div class="section">
+    <div class="section-title"><span class="icon">📋</span> Α. Βασικά στοιχεία της Ευρώπης</div>
+
+    <div class="info-box">
+      Η Ευρώπη βρίσκεται στο <strong>βόρειο</strong> και <strong>δυτικό</strong> ημισφαίριο. Έχει έκταση
+      <strong>10.498.000 τετρ. χλμ.</strong> και πληθυσμό περίπου <strong>729.000.000 κατοίκους</strong>.
+      Βρέχεται βόρεια από τον Βόρειο Παγωμένο Ωκεανό, δυτικά από τον Ατλαντικό Ωκεανό,
+      νότια από τη Μεσόγειο και νοτιοδυτικά από τη Μαύρη Θάλασσα (Εύξεινο Πόντο).
+      Η <strong>ακτογραμμή</strong> της είναι <strong>77.902 χιλιόμετρα</strong> – η πιο εκτεταμένη από
+      όλες τις ηπείρους.
+    </div>
+
+    <!-- EXERCISE 1: Fill blanks -->
+    <div class="exercise" id="ex1">
+      <h4><span class="exercise-num">1</span> Συμπλήρωσε τα κενά με τη σωστή λέξη.</h4>
+      <p style="line-height:2.4; font-size:14px;">
+        Η Ευρώπη βρίσκεται στο <input class="blank-input" id="b1a" placeholder="____" data-ans="βόρειο"> ημισφαίριο.
+        Η ακτογραμμή της φτάνει τα <input class="blank-input" id="b1b" placeholder="____" style="width:110px" data-ans="77902"> χλμ.
+        Βρέχεται νότια από τη <input class="blank-input" id="b1c" placeholder="____" style="width:160px" data-ans="Μεσόγειο Θάλασσα">.
+        Η ήπειρος έχει <input class="blank-input" id="b1d" placeholder="____" style="width:130px" data-ans="729000000"> κατοίκους (2003).
+      </p>
+      <div class="btn-row">
+        <button class="btn btn-check" onclick="checkFill('ex1')">✔ Έλεγχος</button>
+        <button class="btn btn-reset" onclick="resetFill('ex1')">↺ Επαναφορά</button>
+      </div>
+      <div class="feedback" id="ex1-fb"></div>
+    </div>
+
+    <!-- EXERCISE 2: Categories -->
+    <div class="exercise" id="ex2">
+      <h4><span class="exercise-num">2</span> Ταξινόμησε τα στοιχεία στη σωστή κατηγορία. Επίλεξε από τη λίστα.</h4>
+      <p style="font-size:12px; color:#777; margin-bottom:10px;">Λίστα: Βαλτική, Ιβηρική, Δούναβης, Λατόνγκα, Σκανδιναβία, Βαλκανική, Δνείπερος, Βένερ, Νορβηγική, Σικελία, Ισλανδία, Βόλγας</p>
+
+      <div class="cat-grid">
+        <div class="cat-card">
+          <h4>🌊 Θάλασσες</h4>
+          <div id="cat-sea">
+            <div style="margin-bottom:5px;"><select class="styled-select" data-cat="sea" data-ans="Βαλτική"><option value="">– επίλεξε –</option><option>Βαλτική</option><option>Νορβηγική</option><option>Δούναβης</option><option>Λατόνγκα</option></select></div>
+            <div><select class="styled-select" data-cat="sea" data-ans="Νορβηγική"><option value="">– επίλεξε –</option><option>Βαλτική</option><option>Νορβηγική</option><option>Ιβηρική</option><option>Βόλγας</option></select></div>
+          </div>
+        </div>
+        <div class="cat-card">
+          <h4>🏔 Χερσόνησοι</h4>
+          <div id="cat-pen">
+            <div style="margin-bottom:5px;"><select class="styled-select" data-cat="pen" data-ans="Ιβηρική"><option value="">– επίλεξε –</option><option>Ιβηρική</option><option>Σκανδιναβία</option><option>Δνείπερος</option><option>Βαλτική</option></select></div>
+            <div><select class="styled-select" data-cat="pen" data-ans="Βαλκανική"><option value="">– επίλεξε –</option><option>Βαλκανική</option><option>Σκανδιναβία</option><option>Λατόνγκα</option><option>Βαλτική</option></select></div>
+          </div>
+        </div>
+        <div class="cat-card">
+          <h4>🏝 Νησιά</h4>
+          <div id="cat-isl">
+            <div style="margin-bottom:5px;"><select class="styled-select" data-cat="isl" data-ans="Ισλανδία"><option value="">– επίλεξε –</option><option>Ισλανδία</option><option>Βόλγας</option><option>Βαλτική</option><option>Σκανδιναβία</option></select></div>
+            <div><select class="styled-select" data-cat="isl" data-ans="Σικελία"><option value="">– επίλεξε –</option><option>Σικελία</option><option>Δούναβης</option><option>Νορβηγική</option><option>Λατόνγκα</option></select></div>
+          </div>
+        </div>
+        <div class="cat-card">
+          <h4>🏞 Ποταμοί</h4>
+          <div id="cat-riv">
+            <div style="margin-bottom:5px;"><select class="styled-select" data-cat="riv" data-ans="Δούναβης"><option value="">– επίλεξε –</option><option>Δούναβης</option><option>Ιβηρική</option><option>Βένερ</option><option>Βαλτική</option></select></div>
+            <div><select class="styled-select" data-cat="riv" data-ans="Βόλγας"><option value="">– επίλεξε –</option><option>Βόλγας</option><option>Σικελία</option><option>Νορβηγική</option><option>Λατόνγκα</option></select></div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-check" onclick="checkSelects('ex2')">✔ Έλεγχος</button>
+        <button class="btn btn-reset" onclick="resetSelects('ex2')">↺ Επαναφορά</button>
+      </div>
+      <div class="feedback" id="ex2-fb"></div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: ΟΡΙΖΟΝΤΙΟΣ ΔΙΑΜΕΛΙΣΜΟΣ ===== -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🗺</span> Β. Ο Οριζόντιος Διαμελισμός</div>
+
+    <div class="info-box">
+      Ο οριζόντιος διαμελισμός της Ευρώπης είναι ο <strong>εντονότερος από όλες τις ηπείρους</strong>.
+      Οι <strong>κόλποι</strong>, οι <strong>χερσόνησοι</strong>, τα <strong>ακρωτήρια</strong> και τα <strong>νησιά</strong>
+      δίνουν στην Ευρώπη ξεχωριστή ομορφιά και πλουτίζουν τις ακτές της.
+      Στη Βόρεια Σκανδιναβία σχηματίστηκαν από παγετώνες τα λεγόμενα <strong>φιόρδ</strong> –
+      πολύπλοκοι δαντελωτοί κόλποι.
+    </div>
+
+    <!-- MAP with blanks -->
+    <div class="exercise">
+      <h4><span class="exercise-num">3</span> Χάρτης με κενά: Βρες τα στοιχεία του οριζόντιου διαμελισμού.</h4>
+      <p style="font-size:12px; color:#777; margin-bottom:10px;">
+        Γράψε στα πλαίσια τη σωστή ονομασία για κάθε στοιχείο (χερσόνησος, θάλασσα, ποταμός, λίμνη).
+      </p>
+
+      <!-- Simplified SVG Map of Europe with labels -->
+      <div class="map-container" style="position:relative; padding-bottom: 56%;">
+        <svg viewBox="0 0 700 520" style="position:absolute;top:0;left:0;width:100%;height:100%;" xmlns="http://www.w3.org/2000/svg">
+          <!-- Ocean background -->
+          <rect width="700" height="520" fill="#b8d9f0"/>
+          
+          <!-- Europe landmass (simplified) -->
+          <!-- Scandinavia -->
+          <path d="M320,30 L340,40 L360,35 L375,55 L370,80 L350,100 L330,120 L310,140 L300,160 L290,170 L280,150 L290,120 L295,90 L305,60 Z" fill="#c8deb0" stroke="#7aaa50" stroke-width="1"/>
+          <path d="M350,40 L380,30 L410,45 L420,70 L415,100 L400,120 L385,110 L375,80 L365,60 Z" fill="#c8deb0" stroke="#7aaa50" stroke-width="1"/>
+          <path d="M420,45 L450,40 L470,60 L460,80 L440,90 L420,80 L415,60 Z" fill="#c8deb0" stroke="#7aaa50" stroke-width="1"/>
+          
+          <!-- British Isles -->
+          <ellipse cx="200" cy="130" rx="28" ry="45" fill="#c8deb0" stroke="#7aaa50" stroke-width="1"/>
+          <ellipse cx="175" cy="135" rx="15" ry="30" fill="#c8deb0" stroke="#7aaa50" stroke-width="1"/>
+          
+          <!-- Iceland -->
+          <ellipse cx="115" cy="60" rx="22" ry="16" fill="#c8deb0" stroke="#7aaa50" stroke-width="1"/>
+          
+          <!-- Main Europe body -->
+          <path d="M140,180 L190,160 L230,155 L270,158 L305,165 L340,170 L380,165 L420,160 L460,165 L495,170 L520,180 L540,200 L550,220 L545,240 L530,260 L520,280 L510,300 L500,320 L490,335 L475,350 L460,365 L445,375 L430,385 L415,390 L400,395 L385,390 L375,380 L365,370 L350,365 L335,360 L320,355 L300,350 L285,355 L270,365 L255,375 L240,380 L225,370 L215,360 L205,350 L195,340 L185,325 L175,310 L165,295 L155,275 L148,255 L142,230 L140,210 Z" fill="#c8deb0" stroke="#7aaa50" stroke-width="1"/>
+          
+          <!-- Iberian Peninsula -->
+          <path d="M155,280 L185,270 L215,265 L240,270 L250,290 L245,315 L235,335 L220,350 L205,355 L188,350 L175,335 L162,315 L155,295 Z" fill="#d4c89a" stroke="#7aaa50" stroke-width="1"/>
+          
+          <!-- Italy -->
+          <path d="M340,300 L360,295 L375,310 L375,335 L365,360 L355,380 L345,395 L335,400 L330,390 L333,370 L338,350 L340,325 Z" fill="#c8deb0" stroke="#7aaa50" stroke-width="1"/>
+          
+          <!-- Balkans -->
+          <path d="M415,280 L445,270 L470,280 L490,295 L495,320 L485,345 L470,360 L455,370 L440,365 L428,350 L418,330 L415,310 Z" fill="#c8deb0" stroke="#7aaa50" stroke-width="1"/>
+          
+          <!-- Greece -->
+          <path d="M440,355 L455,350 L465,365 L460,382 L448,390 L438,385 L435,370 Z" fill="#c8deb0" stroke="#7aaa50" stroke-width="1"/>
+
+          <!-- Cyprus -->
+          <ellipse cx="520" cy="400" rx="14" ry="8" fill="#c8deb0" stroke="#7aaa50" stroke-width="1"/>
+
+          <!-- Sicily -->
+          <ellipse cx="355" cy="415" rx="16" ry="10" fill="#c8deb0" stroke="#7aaa50" stroke-width="1"/>
+
+          <!-- Sardinia -->
+          <ellipse cx="310" cy="380" rx="10" ry="16" fill="#c8deb0" stroke="#7aaa50" stroke-width="1"/>
+
+          <!-- Russia extension -->
+          <path d="M520,160 L570,155 L620,160 L650,175 L670,200 L660,230 L640,250 L615,255 L590,245 L565,235 L545,225 L535,205 L530,185 Z" fill="#d0e8b0" stroke="#7aaa50" stroke-width="1"/>
+
+          <!-- SEAS LABELS (fixed) -->
+          <text x="120" y="100" fill="#1a5f8a" font-size="9" font-weight="bold" font-family="Arial">ΒΟΡΕΙΟΣ</text>
+          <text x="110" y="112" fill="#1a5f8a" font-size="9" font-weight="bold" font-family="Arial">ΠΑΓΩΜΕΝΟΣ</text>
+          <text x="112" y="124" fill="#1a5f8a" font-size="9" font-weight="bold" font-family="Arial">ΩΚΕΑΝΟΣ</text>
+
+          <text x="60" y="230" fill="#1a5f8a" font-size="9" font-weight="bold" font-family="Arial" transform="rotate(-90 60 230)">ΑΤΛΑΝΤΙΚΟΣ ΩΚΕΑΝΟΣ</text>
+
+          <text x="270" y="465" fill="#1a5f8a" font-size="9" font-weight="bold" font-family="Arial">ΜΕΣΟΓΕΙΟΣ ΘΑΛΑΣΣΑ</text>
+
+          <text x="565" y="280" fill="#1a5f8a" font-size="8" font-weight="bold" font-family="Arial">ΚΑΣΠΙΑ</text>
+          <text x="565" y="291" fill="#1a5f8a" font-size="8" font-weight="bold" font-family="Arial">ΘΑΛΑΣΣΑ</text>
+
+          <!-- BLANK LABELS - These are the ones students fill in -->
+
+          <!-- 1: Σκανδιναβική χερσόνησος -->
+          <line x1="380" y1="80" x2="395" y2="72" stroke="#e07b00" stroke-width="1.2" stroke-dasharray="3,2"/>
+          <rect x="396" y="60" width="100" height="18" rx="3" fill="white" stroke="#e07b00" stroke-width="1.5"/>
+          <text x="400" y="73" fill="#888" font-size="9" font-family="Arial" font-style="italic">① χερσόνησος...?</text>
+
+          <!-- 2: Ιβηρική χερσόνησος -->
+          <line x1="200" y1="310" x2="180" y2="302" stroke="#e07b00" stroke-width="1.2" stroke-dasharray="3,2"/>
+          <rect x="95" y="292" width="84" height="18" rx="3" fill="white" stroke="#e07b00" stroke-width="1.5"/>
+          <text x="98" y="305" fill="#888" font-size="9" font-family="Arial" font-style="italic">② χερσόνησος...?</text>
+
+          <!-- 3: Βαλκανική χερσόνησος -->
+          <line x1="455" y1="320" x2="505" y2="345" stroke="#e07b00" stroke-width="1.2" stroke-dasharray="3,2"/>
+          <rect x="506" y="335" width="84" height="18" rx="3" fill="white" stroke="#e07b00" stroke-width="1.5"/>
+          <text x="509" y="348" fill="#888" font-size="9" font-family="Arial" font-style="italic">③ χερσόνησος...?</text>
+
+          <!-- 4: Βαλτική Θάλασσα -->
+          <rect x="380" y="115" width="80" height="18" rx="3" fill="white" stroke="#1a6fa8" stroke-width="1.5"/>
+          <text x="384" y="128" fill="#888" font-size="9" font-family="Arial" font-style="italic">④ θάλασσα...?</text>
+
+          <!-- 5: Νορβηγική Θάλασσα -->
+          <rect x="195" y="58" width="90" height="18" rx="3" fill="white" stroke="#1a6fa8" stroke-width="1.5"/>
+          <text x="198" y="71" fill="#888" font-size="9" font-family="Arial" font-style="italic">⑤ θάλασσα...?</text>
+
+          <!-- 6: Βόρεια Θάλασσα -->
+          <rect x="215" y="148" width="80" height="18" rx="3" fill="white" stroke="#1a6fa8" stroke-width="1.5"/>
+          <text x="218" y="161" fill="#888" font-size="9" font-family="Arial" font-style="italic">⑥ θάλασσα...?</text>
+
+          <!-- 7: Δούναβης (ποταμός) -->
+          <line x1="450" y1="245" x2="490" y2="218" stroke="#2e8b57" stroke-width="1.2" stroke-dasharray="3,2"/>
+          <rect x="491" y="208" width="80" height="18" rx="3" fill="white" stroke="#2e8b57" stroke-width="1.5"/>
+          <text x="494" y="221" fill="#888" font-size="9" font-family="Arial" font-style="italic">⑦ ποταμός...?</text>
+
+          <!-- 8: Ισλανδία -->
+          <line x1="115" y1="68" x2="115" y2="88" stroke="#c0392b" stroke-width="1.2" stroke-dasharray="3,2"/>
+          <rect x="75" y="89" width="80" height="18" rx="3" fill="white" stroke="#c0392b" stroke-width="1.5"/>
+          <text x="78" y="102" fill="#888" font-size="9" font-family="Arial" font-style="italic">⑧ νησί...?</text>
+
+          <!-- Legend -->
+          <rect x="10" y="430" width="150" height="82" rx="6" fill="rgba(255,255,255,0.9)" stroke="#ccc" stroke-width="1"/>
+          <text x="18" y="446" font-size="9" font-weight="bold" font-family="Arial" fill="#333">ΥΠΟΜΝΗΜΑ:</text>
+          <rect x="18" y="452" width="10" height="10" rx="2" fill="white" stroke="#e07b00" stroke-width="1.5"/>
+          <text x="32" y="461" font-size="8.5" font-family="Arial" fill="#555">Χερσόνησοι (πορτοκαλί)</text>
+          <rect x="18" y="467" width="10" height="10" rx="2" fill="white" stroke="#1a6fa8" stroke-width="1.5"/>
+          <text x="32" y="476" font-size="8.5" font-family="Arial" fill="#555">Θάλασσες (μπλε)</text>
+          <rect x="18" y="482" width="10" height="10" rx="2" fill="white" stroke="#2e8b57" stroke-width="1.5"/>
+          <text x="32" y="491" font-size="8.5" font-family="Arial" fill="#555">Ποταμοί (πράσινο)</text>
+          <rect x="18" y="497" width="10" height="10" rx="2" fill="white" stroke="#c0392b" stroke-width="1.5"/>
+          <text x="32" y="506" font-size="8.5" font-family="Arial" fill="#555">Νησιά (κόκκινο)</text>
+        </svg>
+      </div>
+
+      <!-- Map answers as regular inputs below -->
+      <div style="background:#f8f9fa; border-radius:8px; padding:14px; margin-top:10px;">
+        <p style="font-size:13px; font-weight:700; color:#555; margin-bottom:10px;">Γράψε τις απαντήσεις σου για τον χάρτη:</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div>① Χερσόνησος (βορρ.): <input class="blank-input" id="m1" data-ans="Σκανδιναβική" style="width:130px"></div>
+          <div>② Χερσόνησος (δυτ.): <input class="blank-input" id="m2" data-ans="Ιβηρική" style="width:110px"></div>
+          <div>③ Χερσόνησος (νοτ.): <input class="blank-input" id="m3" data-ans="Βαλκανική" style="width:115px"></div>
+          <div>④ Θάλασσα (κεντρ.): <input class="blank-input" id="m4" data-ans="Βαλτική" style="width:110px"></div>
+          <div>⑤ Θάλασσα (βορρ.δ.): <input class="blank-input" id="m5" data-ans="Νορβηγική" style="width:120px"></div>
+          <div>⑥ Θάλασσα (δυτ.): <input class="blank-input" id="m6" data-ans="Βόρεια" style="width:100px"></div>
+          <div>⑦ Ποταμός (κεντρ.): <input class="blank-input" id="m7" data-ans="Δούναβης" style="width:115px"></div>
+          <div>⑧ Νησί (βορρ.): <input class="blank-input" id="m8" data-ans="Ισλανδία" style="width:110px"></div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-check" onclick="checkMap()">✔ Έλεγχος χάρτη</button>
+        <button class="btn btn-reset" onclick="resetMap()">↺ Επαναφορά</button>
+        <button class="btn btn-reveal" onclick="revealMap()" style="background:#9b59b6;">💡 Λύση</button>
+      </div>
+      <div class="feedback" id="map-fb"></div>
+    </div>
+
+    <!-- EXERCISE 4: True/False -->
+    <div class="exercise" id="ex4">
+      <h4><span class="exercise-num">4</span> Σωστό ή Λάθος; Επίλεξε και έπειτα έλεγξε.</h4>
+      <div id="tf-container">
+        <div class="tf-row">
+          <span class="tf-text">Η Ευρώπη έχει τον εντονότερο οριζόντιο διαμελισμό από όλες τις ηπείρους.</span>
+          <button class="tf-btn" data-id="tf1" data-val="true" onclick="selectTF(this)">✓ Σωστό</button>
+          <button class="tf-btn" data-id="tf1" data-val="false" onclick="selectTF(this)">✗ Λάθος</button>
+          <input type="hidden" id="tf1" data-ans="true">
+        </div>
+        <div class="tf-row">
+          <span class="tf-text">Τα φιόρδ είναι μεγάλες εκτάσεις πεδιάδων στη Βόρεια Ευρώπη.</span>
+          <button class="tf-btn" data-id="tf2" data-val="true" onclick="selectTF(this)">✓ Σωστό</button>
+          <button class="tf-btn" data-id="tf2" data-val="false" onclick="selectTF(this)">✗ Λάθος</button>
+          <input type="hidden" id="tf2" data-ans="false">
+        </div>
+        <div class="tf-row">
+          <span class="tf-text">Η Βαλκανική χερσόνησος χαρακτηρίζεται από πολλά νησιά (π.χ. Ελλάδα, Κροατία).</span>
+          <button class="tf-btn" data-id="tf3" data-val="true" onclick="selectTF(this)">✓ Σωστό</button>
+          <button class="tf-btn" data-id="tf3" data-val="false" onclick="selectTF(this)">✗ Λάθος</button>
+          <input type="hidden" id="tf3" data-ans="true">
+        </div>
+        <div class="tf-row">
+          <span class="tf-text">Η ακτογραμμή της Ευρώπης είναι η μικρότερη από όλες τις ηπείρους.</span>
+          <button class="tf-btn" data-id="tf4" data-val="true" onclick="selectTF(this)">✓ Σωστό</button>
+          <button class="tf-btn" data-id="tf4" data-val="false" onclick="selectTF(this)">✗ Λάθος</button>
+          <input type="hidden" id="tf4" data-ans="false">
+        </div>
+        <div class="tf-row">
+          <span class="tf-text">Στους κόλπους της Ευρώπης έχουν αναπτυχθεί μεγάλα λιμάνια.</span>
+          <button class="tf-btn" data-id="tf5" data-val="true" onclick="selectTF(this)">✓ Σωστό</button>
+          <button class="tf-btn" data-id="tf5" data-val="false" onclick="selectTF(this)">✗ Λάθος</button>
+          <input type="hidden" id="tf5" data-ans="true">
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-check" onclick="checkTF()">✔ Έλεγχος</button>
+        <button class="btn btn-reset" onclick="resetTF()">↺ Επαναφορά</button>
+      </div>
+      <div class="feedback" id="ex4-fb"></div>
+    </div>
+
+    <!-- EXERCISE 5: Open question -->
+    <div class="exercise">
+      <h4><span class="exercise-num">5</span> Ερώτηση κατανόησης – Σκέψου και γράψε.</h4>
+      <p style="font-size:13px; color:#555; margin-bottom:10px;">Γιατί η ύπαρξη μεγάλων λιμανιών στους κόλπους της Ευρώπης είναι σημαντική; Γράψε 2–3 λόγους.</p>
+      <textarea style="width:100%; min-height:80px; border:2px solid #b0c8dc; border-radius:8px; padding:10px; font-family:inherit; font-size:13px; resize:vertical; outline:none;" placeholder="Γράψε εδώ την απάντησή σου..."></textarea>
+      <div class="hint-box" id="hint5">
+        💡 <strong>Βοήθεια:</strong> Σκέψου για συγκοινωνίες, μεταφορές εμπορευμάτων, τουρισμό, αλιεία.
+      </div>
+      <div class="btn-row">
+        <button class="btn" style="background:#9b59b6;color:white;" onclick="toggleHint('hint5')">💡 Υπόδειξη</button>
+        <button class="btn btn-reveal" onclick="showModelAnswer('ma5','hint5')">📖 Ενδεικτική Απάντηση</button>
+      </div>
+      <div class="feedback ok" id="ma5" style="display:none; margin-top:10px;">
+        <strong>Ενδεικτική απάντηση:</strong> Τα μεγάλα λιμάνια στους κόλπους της Ευρώπης εξυπηρετούν
+        (α) τις <em>συγκοινωνίες</em> μεταξύ χωρών και ηπείρων, (β) τις <em>μεταφορές εμπορευμάτων</em> που τροφοδοτούν τις οικονομίες,
+        (γ) τον <em>τουρισμό</em> μέσω κρουαζιέρων, και (δ) την <em>αλιεία</em>.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: ΑΥΤΟΑΞΙΟΛΟΓΗΣΗ ===== -->
+  <div class="section">
+    <div class="section-title"><span class="icon">⭐</span> Γ. Αυτοαξιολόγηση</div>
+    <p style="font-size:13px; color:#555; margin-bottom:14px;">Πόσο καλά νιώθεις ότι ξέρεις κάθε θέμα; Δώσε 1–3 αστέρια.</p>
+
+    <div class="self-assess">
+      <h4>🎯 Αξιολόγησε τον εαυτό σου</h4>
+      <div class="assess-item">
+        <span class="tf-text" style="flex:1; font-size:13px;">Ξέρω τα βασικά γεωγραφικά στοιχεία της Ευρώπης (έκταση, πληθυσμός, θέση)</span>
+        <div class="assess-stars" id="stars1">
+          <button class="star-btn" onclick="rateStar('stars1',1)">★</button>
+          <button class="star-btn" onclick="rateStar('stars1',2)">★</button>
+          <button class="star-btn" onclick="rateStar('stars1',3)">★</button>
+        </div>
+      </div>
+      <div class="assess-item">
+        <span class="tf-text" style="flex:1; font-size:13px;">Μπορώ να αναφέρω τις κύριες θάλασσες που βρέχουν την Ευρώπη</span>
+        <div class="assess-stars" id="stars2">
+          <button class="star-btn" onclick="rateStar('stars2',1)">★</button>
+          <button class="star-btn" onclick="rateStar('stars2',2)">★</button>
+          <button class="star-btn" onclick="rateStar('stars2',3)">★</button>
+        </div>
+      </div>
+      <div class="assess-item">
+        <span class="tf-text" style="flex:1; font-size:13px;">Ξέρω τις 3 μεγάλες χερσονήσους της Ευρώπης</span>
+        <div class="assess-stars" id="stars3">
+          <button class="star-btn" onclick="rateStar('stars3',1)">★</button>
+          <button class="star-btn" onclick="rateStar('stars3',2)">★</button>
+          <button class="star-btn" onclick="rateStar('stars3',3)">★</button>
+        </div>
+      </div>
+      <div class="assess-item">
+        <span class="tf-text" style="flex:1; font-size:13px;">Καταλαβαίνω τι σημαίνει «οριζόντιος διαμελισμός» και γιατί είναι σημαντικός</span>
+        <div class="assess-stars" id="stars4">
+          <button class="star-btn" onclick="rateStar('stars4',1)">★</button>
+          <button class="star-btn" onclick="rateStar('stars4',2)">★</button>
+          <button class="star-btn" onclick="rateStar('stars4',3)">★</button>
+        </div>
+      </div>
+      <div class="assess-item">
+        <span class="tf-text" style="flex:1; font-size:13px;">Ξέρω τι είναι τα φιόρδ και πού σχηματίστηκαν</span>
+        <div class="assess-stars" id="stars5">
+          <button class="star-btn" onclick="rateStar('stars5',1)">★</button>
+          <button class="star-btn" onclick="rateStar('stars5',2)">★</button>
+          <button class="star-btn" onclick="rateStar('stars5',3)">★</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:#fff3e0; border:1px solid #ffe0b2; border-radius:10px; padding:14px; font-size:13px; color:#e65100;">
+      <strong>📌 Μην ξεχάσεις:</strong> Αν έδωσες 1 ★ σε κάποιο θέμα, ξαναδιάβασε το κεφάλαιο και δοκίμασε ξανά!
+    </div>
+  </div>
+
+  <!-- TOTAL SCORE -->
+  <div class="section" style="border-bottom:none;">
+    <div class="btn-row" style="justify-content:center;">
+      <button class="btn btn-check" style="font-size:16px; padding:12px 32px;" onclick="calcTotal()">🏆 Υπολογισμός Συνολικής Βαθμολογίας</button>
+    </div>
+    <div class="score-display" id="total-score"></div>
+  </div>
+
+  <div class="footer">
+    © myspiderwebsite | Christina Papadimitriou
+  </div>
+</div>
+
+<script>
+// ===== FILL IN THE BLANK =====
+function normalize(s) {
+  return s.trim().toLowerCase()
+    .replace(/ά/g,'α').replace(/έ/g,'ε').replace(/ή/g,'η')
+    .replace(/ί/g,'ι').replace(/ό/g,'ο').replace(/ύ/g,'υ')
+    .replace(/ώ/g,'ω').replace(/ϊ/g,'ι').replace(/ΐ/g,'ι')
+    .replace(/ΰ/g,'υ').replace(/ς/g,'σ').replace(/\s+/g,' ');
+}
+
+function checkFill(exId) {
+  const ex = document.getElementById(exId);
+  const inputs = ex.querySelectorAll('.blank-input');
+  let correct = 0;
+  inputs.forEach(inp => {
+    const ans = normalize(inp.dataset.ans);
+    const val = normalize(inp.value);
+    // Allow partial match for longer answers
+    if (val === ans || ans.includes(val) && val.length > 3) {
+      inp.classList.add('correct'); inp.classList.remove('wrong'); correct++;
+    } else {
+      inp.classList.add('wrong'); inp.classList.remove('correct');
+    }
+  });
+  const fb = document.getElementById(exId+'-fb');
+  fb.className = 'feedback show ' + (correct===inputs.length ? 'ok' : 'err');
+  fb.innerHTML = correct===inputs.length
+    ? '✅ Μπράβο! Όλες οι απαντήσεις σωστές!'
+    : `⚠️ ${correct} από ${inputs.length} σωστές. Δες τα κόκκινα κενά και ξαναπροσπάθησε.`;
+}
+
+function resetFill(exId) {
+  const ex = document.getElementById(exId);
+  ex.querySelectorAll('.blank-input').forEach(inp => { inp.value=''; inp.className='blank-input'; });
+  const fb = document.getElementById(exId+'-fb');
+  fb.className = 'feedback'; fb.innerHTML='';
+}
+
+// ===== SELECTS =====
+function checkSelects(exId) {
+  const ex = document.getElementById(exId);
+  const selects = ex.querySelectorAll('select');
+  let correct = 0;
+  selects.forEach(sel => {
+    if (normalize(sel.value) === normalize(sel.dataset.ans)) {
+      sel.classList.add('correct'); sel.classList.remove('wrong'); correct++;
+    } else {
+      sel.classList.add('wrong'); sel.classList.remove('correct');
+    }
+  });
+  const fb = document.getElementById(exId+'-fb');
+  fb.className = 'feedback show ' + (correct===selects.length ? 'ok' : 'err');
+  fb.innerHTML = correct===selects.length
+    ? '✅ Τέλεια! Όλες σωστές!'
+    : `⚠️ ${correct} από ${selects.length} σωστές.`;
+}
+
+function resetSelects(exId) {
+  const ex = document.getElementById(exId);
+  ex.querySelectorAll('select').forEach(sel => { sel.value=''; sel.className='styled-select'; });
+  const fb = document.getElementById(exId+'-fb');
+  fb.className = 'feedback'; fb.innerHTML='';
+}
+
+// ===== MAP =====
+const mapAnswers = {
+  m1: 'σκανδιναβική', m2: 'ιβηρική', m3: 'βαλκανική',
+  m4: 'βαλτική', m5: 'νορβηγική', m6: 'βόρεια',
+  m7: 'δούναβης', m8: 'ισλανδία'
+};
+
+function checkMap() {
+  let correct = 0, total = Object.keys(mapAnswers).length;
+  for (const [id, ans] of Object.entries(mapAnswers)) {
+    const inp = document.getElementById(id);
+    if (normalize(inp.value) === ans) {
+      inp.classList.add('correct'); inp.classList.remove('wrong'); correct++;
+    } else {
+      inp.classList.add('wrong'); inp.classList.remove('correct');
+    }
+  }
+  const fb = document.getElementById('map-fb');
+  fb.className = 'feedback show ' + (correct===total ? 'ok' : 'err');
+  fb.innerHTML = correct===total
+    ? '🗺️ ✅ Ο χάρτης σου είναι σωστός!'
+    : `🗺️ ⚠️ ${correct} από ${total} σωστές. Ξαναδές τον χάρτη στο βιβλίο σου.`;
+}
+
+function resetMap() {
+  Object.keys(mapAnswers).forEach(id => {
+    const inp = document.getElementById(id);
+    inp.value = ''; inp.className = 'blank-input';
+  });
+  const fb = document.getElementById('map-fb');
+  fb.className = 'feedback'; fb.innerHTML = '';
+}
+
+function revealMap() {
+  const revealed = {
+    m1:'Σκανδιναβική', m2:'Ιβηρική', m3:'Βαλκανική',
+    m4:'Βαλτική', m5:'Νορβηγική', m6:'Βόρεια',
+    m7:'Δούναβης', m8:'Ισλανδία'
+  };
+  Object.entries(revealed).forEach(([id,val]) => {
+    const inp = document.getElementById(id);
+    inp.value = val; inp.classList.add('correct'); inp.classList.remove('wrong');
+  });
+  const fb = document.getElementById('map-fb');
+  fb.className = 'feedback show ok';
+  fb.innerHTML = '💡 Εδώ είναι οι σωστές απαντήσεις. Μελέτησέ τες και κλείσε τη λύση για να ξαναδοκιμάσεις!';
+}
+
+// ===== TRUE/FALSE =====
+function selectTF(btn) {
+  const id = btn.dataset.id;
+  document.querySelectorAll(`[data-id="${id}"]`).forEach(b => {
+    b.classList.remove('selected-true','selected-false');
+  });
+  btn.classList.add(btn.dataset.val==='true' ? 'selected-true' : 'selected-false');
+  document.getElementById(id).value = btn.dataset.val;
+}
+
+function checkTF() {
+  let correct = 0, total = 5;
+  for (let i=1; i<=5; i++) {
+    const inp = document.getElementById('tf'+i);
+    const ans = inp.dataset.ans;
+    const given = inp.value;
+    const btns = document.querySelectorAll(`[data-id="tf${i}"]`);
+    btns.forEach(b => {
+      b.classList.remove('selected-true','selected-false');
+      if (b.dataset.val === ans) b.classList.add('correct-final');
+      else if (b.dataset.val === given && given !== ans) b.classList.add('wrong-final');
+    });
+    if (given === ans) correct++;
+  }
+  const fb = document.getElementById('ex4-fb');
+  fb.className = 'feedback show ' + (correct===total ? 'ok' : 'err');
+  fb.innerHTML = correct===total
+    ? '✅ Τέλεια! Όλες σωστές!'
+    : `⚠️ ${correct} από ${total} σωστές. Τα πράσινα δείχνουν τις σωστές απαντήσεις.`;
+}
+
+function resetTF() {
+  for (let i=1; i<=5; i++) {
+    document.getElementById('tf'+i).value = '';
+    document.querySelectorAll(`[data-id="tf${i}"]`).forEach(b => {
+      b.className = 'tf-btn';
+    });
+  }
+  const fb = document.getElementById('ex4-fb'); fb.className='feedback'; fb.innerHTML='';
+}
+
+// ===== HINT / MODEL ANSWER =====
+function toggleHint(id) {
+  const h = document.getElementById(id);
+  h.classList.toggle('show');
+}
+function showModelAnswer(id) {
+  document.getElementById(id).style.display = 'block';
+}
+
+// ===== STARS =====
+function rateStar(groupId, rating) {
+  const stars = document.getElementById(groupId).querySelectorAll('.star-btn');
+  stars.forEach((s,i) => { s.classList.toggle('active', i < rating); });
+}
+
+// ===== TOTAL SCORE =====
+function calcTotal() {
+  // Count fill blanks
+  let fillCorrect=0, fillTotal=0;
+  document.querySelectorAll('#ex1 .blank-input').forEach(inp => {
+    fillTotal++;
+    if(inp.classList.contains('correct')) fillCorrect++;
+  });
+  // Count selects
+  let selCorrect=0, selTotal=0;
+  document.querySelectorAll('#ex2 select').forEach(sel => {
+    selTotal++;
+    if(sel.classList.contains('correct')) selCorrect++;
+  });
+  // Map
+  let mapCorrect=0, mapTotal=Object.keys(mapAnswers).length;
+  Object.keys(mapAnswers).forEach(id=>{
+    if(document.getElementById(id).classList.contains('correct')) mapCorrect++;
+  });
+  // TF
+  let tfCorrect=0, tfTotal=5;
+  for(let i=1;i<=5;i++){
+    const inp=document.getElementById('tf'+i);
+    if(inp.value && inp.value===inp.dataset.ans) tfCorrect++;
+  }
+
+  const total = fillTotal + selTotal + mapTotal + tfTotal;
+  const correct = fillCorrect + selCorrect + mapCorrect + tfCorrect;
+  const pct = Math.round(correct/total*100);
+
+  const el = document.getElementById('total-score');
+  el.className = 'score-display show';
+  let emoji = pct>=80?'🏆':pct>=60?'👍':'📚';
+  let msg = pct>=80?'Εξαιρετικά! Έχεις κατανοήσει πολύ καλά το μάθημα!':
+            pct>=60?'Καλή δουλειά! Λίγο ακόμα μελέτη και θα τα ξέρεις όλα.':
+            'Μην ανησυχείς – ξαναδιάβασε και ξαναδοκίμασε!';
+  el.innerHTML = `${emoji} Βαθμολογία<div class="score-num">${correct} / ${total}</div><div style="font-size:22px;">${pct}%</div><div style="font-size:14px;margin-top:8px;font-weight:400;">${msg}</div>`;
+}
+</script>
+</body>
+</html>
